@@ -1,11 +1,8 @@
 {
   description = "Pre-built OCI images for ix VMs";
 
-  # znver5 forces every package in the closure to build from source: the
-  # nixpkgs binary cache is generic x86_64 and never has a hit. The
-  # indexable-inc Cachix cache stores the znver5-tuned closures CI builds,
-  # so a fresh checkout downloads instead of recompiling. Priority 30 (set
-  # in the cache settings) puts it ahead of cache.nixos.org by default.
+  # The repo cache stores index-owned outputs CI builds. Generic nixpkgs
+  # dependencies still substitute from cache.nixos.org.
   nixConfig = {
     extra-substituters = [ "https://indexable-inc.cachix.org" ];
     extra-trusted-public-keys = [

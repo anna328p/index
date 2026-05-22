@@ -160,12 +160,9 @@ let
         pkgs = final;
         ix = ixForOverlay;
       };
-      # The znver5 host platform forces every package in the closure to
-      # build from source, which is where the four overrides below earn
-      # their keep. Applied unconditionally they also invalidate the host
-      # pkgs on a developer's darwin or generic-linux machine, so
-      # `nix run .#lint` ends up rebuilding GHC for nixfmt instead of
-      # substituting from cache.nixos.org. Gate on the actual reason.
+      # Some callers may still opt into a znver5 host platform for private
+      # builds. Keep those targeted workarounds gated so the default image
+      # platform remains generic and substitutes from cache.nixos.org.
       znver5 = prev.stdenv.hostPlatform.gcc.arch or null == "znver5";
     in
     {
