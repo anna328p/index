@@ -45,6 +45,15 @@ After local checks pass, push the branch and open a PR targeting `main`. Enable
 auto-merge when branch protection and review state allow it. Remove the worktree
 and delete the local branch after the PR has merged.
 
+Use the GitHub CLI token for HTTPS pushes by default so Git does not reuse a
+read-only bot credential from the credential helper:
+
+```sh
+git push -u "https://$(gh auth token)@github.com/indexable-inc/index.git" <branch>
+git fetch origin <branch>:refs/remotes/origin/<branch>
+git branch --set-upstream-to=origin/<branch> <branch>
+```
+
 Commit one logical change at a time. Use the pathspec form so unrelated staged
 or unstaged files cannot ride along:
 
