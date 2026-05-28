@@ -12,7 +12,7 @@ final: _prev:
 let
   packageSystem = final.stdenv.hostPlatform.system;
   rustPkgs = final.extend rust-overlay.overlays.default;
-  symphonyRoomServerRaw = buildRustPackage rustPkgs {
+  symphonyRoomServerChecked = buildRustPackage rustPkgs {
     pname = "room-server";
     version = "0.1.0";
     src = symphony;
@@ -29,6 +29,7 @@ let
     ];
     meta.mainProgram = "room-server";
   };
+  symphonyRoomServerRaw = symphonyRoomServerChecked.passthru.unchecked;
   symphonyRoomServer =
     final.runCommand "room-server-wrapped"
       {
