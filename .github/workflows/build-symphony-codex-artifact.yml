@@ -28,8 +28,10 @@ jobs:
       - name: Stage artifact
         run: |
           set -euo pipefail
-          mkdir artifact
-          cp -L symphony-codex-image artifact/symphony-codex-2026-05-28.tar
+          mkdir artifact materialized
+          tar -xf symphony-codex-image -C materialized
+          tar --dereference --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner \
+            -cf artifact/symphony-codex-2026-05-28.tar -C materialized .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
