@@ -32,7 +32,7 @@ jobs:
           cp -L symphony-codex-image artifact/symphony-codex-2026-05-28.tar
 
       - name: Upload artifact
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v4
+        uses: actions/upload-artifact@v4
         with:
           name: symphony-codex-2026-05-28
           path: artifact/symphony-codex-2026-05-28.tar
