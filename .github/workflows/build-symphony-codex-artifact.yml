@@ -1,0 +1,40 @@
+name: Build symphony-codex artifact
+
+on:
+  push:
+    branches:
+      - codex/build-symphony-codex-artifact
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Install Determinate Nix
+        uses: DeterminateSystems/determinate-nix-action@bafaa638b9d5ec0e7e3ac1a7fc80453ef1fd265f # v3
+        with:
+          extra-conf: |
+            extra-system-features = gccarch-znver5
+            accept-flake-config = true
+
+      - name: Build symphony-codex image
+        run: nix build .#packages.x86_64-linux.symphony-codex --out-link symphony-codex-image -L
+
+      - name: Stage artifact
+        run: |
+          set -euo pipefail
+          mkdir artifact
+          cp -L symphony-codex-image artifact/symphony-codex-2026-05-28.tar
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v4
+        with:
+          name: symphony-codex-2026-05-28
+          path: artifact/symphony-codex-2026-05-28.tar
+          if-no-files-found: error
+          compression-level: 0
